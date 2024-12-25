@@ -15,6 +15,7 @@ import androidx.lifecycle.withStarted
 import com.woocommerce.android.AppPrefsWrapper
 import com.woocommerce.android.AppUrls
 import com.woocommerce.android.AppUrls.LOGIN_WITH_EMAIL_WHAT_IS_WORDPRESS_COM_ACCOUNT
+import com.woocommerce.android.BuildConfig
 import com.woocommerce.android.R
 import com.woocommerce.android.analytics.AnalyticsEvent
 import com.woocommerce.android.analytics.AnalyticsTracker
@@ -55,6 +56,7 @@ import com.woocommerce.android.util.ChromeCustomTabUtils
 import com.woocommerce.android.util.ChromeCustomTabUtils.Height.Partial.ThreeQuarters
 import com.woocommerce.android.util.UrlUtils
 import com.woocommerce.android.util.WooLog
+import com.woocommerce.android.util.getBuildConfigValueOrNull
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
@@ -350,7 +352,10 @@ class LoginActivity :
         clearCachedSites()
 
         if (authOptions != null) {
-            if (authOptions.isPasswordless) {
+            val forcePasswordLogin = BuildConfig.DEBUG &&
+                getBuildConfigValueOrNull<Boolean>("FORCE_PASSWORD_LOGIN") == true
+
+            if (authOptions.isPasswordless && !forcePasswordLogin) {
                 showMagicLinkRequestScreen(email, verifyEmail, allowPassword = false, forceRequestAtStart = true)
             } else {
                 showEmailPasswordScreen(email, verifyEmail)
