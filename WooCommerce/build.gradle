@@ -534,8 +534,13 @@ task copyGoogleServicesExampleFile(type: Copy) {
 android.buildTypes.all { buildType ->
     (secretProperties + developerProperties).any { property ->
         if (property.key.toLowerCase().startsWith("wc.")) {
-            buildType.buildConfigField "String", property.key.replace("wc.", "").replace(".", "_").toUpperCase(),
-                    "\"${property.value}\""
+            if (property.value == "true" || property.value == "false") {
+                buildType.buildConfigField "boolean", property.key.replace("wc.", "").replace(".", "_").toUpperCase(),
+                        property.value
+            } else {
+                buildType.buildConfigField "String", property.key.replace("wc.", "").replace(".", "_").toUpperCase(),
+                        "\"${property.value}\""
+            }
         }
         if (property.key.toLowerCase().startsWith("wc.res.")) {
             buildType.resValue "string", property.key.replace("wc.res.", "").replace(".", "_").toLowerCase(),
