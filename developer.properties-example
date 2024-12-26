@@ -2,5 +2,5 @@
 wc.in_app_update_type = 0
 wc.iap_testing_sandbox_url=
 wc.jitm_testing_json_file_name=
-wc.force_password_login = true
+wc.force_password_login = false
 enable_leak_canary=true
